@@ -1,6 +1,6 @@
 # SDCInterpreter
 
-#### This repository contains the code and data for ¡°Path-based graph neural network for drug synergy prediction and interpretation¡±
+#### This repository contains the code and data for "Path-based graph neural network for drug synergy prediction and interpretation". 
 
 ## Overview  
 ![model](Overview.jpg)
