@@ -31,7 +31,7 @@ python interpret.py
 Author:  Shuo Wang
 Mail:  2023120666@mail.scuec.edu.cn
 
-Corresponding author£ºXian-gan Chen
+Corresponding author:  Xian-gan Chen
 Mail:  chenxg@mail.scuec.edu.cn
 
 Date: 2025-10-23
