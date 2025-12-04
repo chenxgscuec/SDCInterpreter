@@ -54,9 +54,6 @@ def metrics_graph(yt, yp):
     # ---f1,acc
     real_score = np.asmatrix(yt)
     predict_score = np.asmatrix(yp)
-
-
-    
     sorted_predict_score = np.array(sorted(list(set(np.array(predict_score).flatten()))))
     sorted_predict_score_num = len(sorted_predict_score)
     thresholds = sorted_predict_score[np.int32(sorted_predict_score_num * np.arange(1, 1000) / 1000)]

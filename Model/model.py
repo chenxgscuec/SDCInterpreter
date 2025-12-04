@@ -46,7 +46,7 @@ class HeteroRGCNLayer(nn.Module):
         # W_0 for transform the node's own feature
         # self.emb_dim = in_size
         self.weight0 = nn.Linear(in_size, out_size)
-        
+
         # W_r for each relation
         self.weight = nn.ModuleDict({
                 name : nn.Linear(in_size, out_size) for name in etypes
@@ -58,19 +58,19 @@ class HeteroRGCNLayer(nn.Module):
         if eweight_dict is not None:
             # Store the sigmoid of edge weights
             g.edata['_edge_weight'] = eweight_dict
-                
+
         for ntype in g.ntypes:
             # Compute h_0 = W_0 * h
             h0 = self.weight0(feat_dict[ntype])
-            g.nodes[ntype].data['h0'] = h0  
-            g.nodes[ntype].data['h'] = h0         
+            g.nodes[ntype].data['h0'] = h0
+            g.nodes[ntype].data['h'] = h0
             # g.nodes[ntype].data['h'] = torch.empty((g.number_of_nodes(ntype), self.emb_dim))
-        
+
         for srctype, etype, dsttype in g.canonical_etypes:
             # Compute h_0 = W_0 * h
             # h0 = self.weight0(feat_dict[srctype])
             # g.nodes[srctype].data['h0'] = h0
-            
+
             # Compute h_r = W_r * h
             Wh = self.weight[etype](feat_dict[srctype])
             # Save it in graph_1 for message passing
@@ -82,14 +82,14 @@ class HeteroRGCNLayer(nn.Module):
                 msg_fn = fn.u_mul_e('Wh_%s' % etype, '_edge_weight', 'm')
             else:
                 msg_fn = fn.copy_u('Wh_%s' % etype, 'm')
-                
+
             funcs[(srctype, etype, dsttype)] = (msg_fn, fn.mean('m', 'h'))
 
         def apply_func(nodes):
             h = nodes.data['h'] + nodes.data['h0']
             # h = nodes.data.get('h', torch.empty_like(nodes.data['h0'])) + nodes.data['h0']
             return {'h': h}
-        
+
         # Trigger message passing of multiple types.
         # The first argument is the message passing functions for each relation.
         # The second one is the type wise reducer, could be "sum", "max",

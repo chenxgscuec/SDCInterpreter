@@ -1,10 +1,9 @@
 #encoding=utf-8
 import argparse
-import numpy as np
 from Utils.utils import metrics_graph, set_seed_all
 import glob
 import os
-from sklearn.model_selection import KFold, train_test_split
+from sklearn.model_selection import KFold
 from Utils.utils import Data
 from Utils.loader_utils import *
 from Model.model import HeteroRGCN, HeteroPredictionModel
@@ -34,8 +33,7 @@ def test(model, graph, validLoader):
             loss = loss_func(pred, label.to(device).to(torch.float32))
             pre_ls += pred.cpu().detach().numpy().tolist()
             true_ls += label.cpu().detach().numpy().tolist()
-        auc_test, aupr_test, f1_test, acc_test = metrics_graph(label.cpu().detach().numpy(),
-                                                               pred.cpu().detach().numpy())
+        auc_test, aupr_test, f1_test, acc_test = metrics_graph(true_ls, pre_ls)
     return [auc_test, aupr_test, f1_test, acc_test], loss.item(), pred.cpu().detach().numpy()
 
 def data_split(synergy, rd_seed=0):
@@ -116,7 +114,7 @@ for cv_mode in cv_mode_ls:
                 [j for i in pair_train for j in synergy_cv if (i[0] == j[0]) and (i[1] == j[1])])
             synergy_validation = np.array(
                 [j for i in pair_validation for j in synergy_cv if (i[0] == j[0]) and (i[1] == j[1])])
-        np.savetxt(path + 'val_' + str(fold_num+1) + '_true.txt', synergy_validation[:, 3])
+        np.savetxt(path + 'val_' + str(fold_num+1) + '_true.txt', synergy_validation[:, 3]) #验证集的标签
         # --DataLoader
         trainLoader = define_dataloader(synergy=synergy_train, batch_size=args.batch_size, train=True)
         validLoader = define_dataloader(synergy=synergy_validation, batch_size=args.batch_size, train=True)
@@ -178,7 +176,7 @@ for cv_mode in cv_mode_ls:
             output_dir = args.saved_model_dir
             if not os.path.exists(output_dir):
                 os.makedirs(output_dir)
-            torch.save(model.state_dict(), output_dir + str(cv_mode) + '_' + f"{args.dataset_name}_" + str(fold_num+1) +"_model.pth")
+            torch.save(model.state_dict(), output_dir + f"{args.dataset_name}_" + str(fold_num+1) +"_model.pth")
             print('--- saving model successfully. ---')
         fold_num = fold_num + 1
     final_metric /= 5

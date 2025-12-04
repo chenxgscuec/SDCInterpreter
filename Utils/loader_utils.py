@@ -41,6 +41,7 @@ def collate(batch):
     return inputs, labels
 
 
+
 def define_dataloader(synergy=None, batch_size=None, train=True):
     # 划分训练集
     Combo_data = synergy[:, 0:-1]
@@ -52,3 +53,4 @@ def define_dataloader(synergy=None, batch_size=None, train=True):
     else:
         trainLoader = DataLoader(train_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate)
     return trainLoader
+
