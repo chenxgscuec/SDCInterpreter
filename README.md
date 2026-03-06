@@ -55,3 +55,18 @@ Corresponding author: Xian-gan Chen Mail: chenxg@mail.scuec.edu.cn
 Date: 2025-12-5
 
 School of Biomedical Engineering, South-Central Minzu University, China
+
+Feel free to cite this work if you find it useful to you !
+
+```python
+@article{SDCInterpreter,
+    title = Path-based graph neural network for drug synergy prediction and interpretation,
+    author = {Shuo Wang, Hongchuan Yuan, Zhengcheng Hong, Xian-gan Chen, Xiaofei Yang},
+    year = {2026},
+    volume = {66},
+    issue = {1},
+    page = {337-348},
+    journal = {Journal of Chemical Information and Modeling},
+    doi = {10.1021/acs.jcim.5c02569},
+}
+```
